@@ -1,0 +1,105 @@
+\documentclass[10pt,landscape]{article}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{verbatim}
+\usepackage{systeme}
+\usepackage{nicefrac}
+\usepackage{accents}
+\usepackage{enumitem}
+\usepackage[printwatermark]{xwatermark}
+\usepackage{tikz}
+\usetikzlibrary{calc,matrix,arrows,intersections,decorations.pathreplacing,shapes.misc}
+\usepackage[compact]{titlesec}
+\usepackage{microtype}
+\usepackage[flushleft]{threeparttable}
+\usepackage{textcomp}
+\usepackage{pifont}
+\usepackage{pgfplots}
+\usepackage[arrowdel]{physics}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{stmaryrd}
+\usepackage{chemformula}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% Ranges of numbers
+\sisetup{range-phrase=--}
+
+% Page margins
+\geometry{top=.5in,left=.5in,right=.5in,bottom=.5in,headsep=0in}
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Reduce size of \section e \subsection
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\small\bfseries}{\thesubsection}{1em}{}
+\titlespacing{\section}{0pt}{0ex}{-0.5ex}
+\titlespacing{\subsection}{0pt}{0ex}{-0.5ex}
+\titlespacing{\subsubsection}{0pt}{0ex}{-0.5ex}
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\setlist[itemize]{noitemsep, nolistsep}
+
+% No idea, without this tikz gives a warning
+\pgfplotsset{compat=1.16}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\newcommand{\sla}{\shortleftarrow}
+\newcommand{\sra}{\shortrightarrow}
+
+\DeclareMathOperator{\Nus}{Nu}
+\DeclareMathOperator{\Rey}{Re}
+\DeclareMathOperator{\Pra}{Pr}
+\DeclareMathOperator{\Gra}{Gr}
+\DeclareMathOperator{\Pec}{Pe}
+\DeclareMathOperator{\Ray}{Ra}
+
+\newcommand{\gaussiana}[4]{
+	\begin{axis}[
+		hide axis,
+		axis lines=left,
+		xtick=\empty,
+		ytick=\empty,
+		every axis plot post/.append style={mark=none,domain=-1:1,samples=50,smooth},
+		xmin=#1,
+		xmax=#2,
+		ymin=#3,
+		ymax=#4,
+		width=5cm
+	]
+		\addplot[black] {gauss(0,0.6)};
+	\end{axis}
+}
+
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhead[R]{Pagina \thepage{} di \pageref{LastPage}}
+\fancyhead[L]{}
+\fancyfoot[C]{}
+\renewcommand{\headrulewidth}{0pt}
