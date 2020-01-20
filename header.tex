@@ -31,6 +31,7 @@
 \usepackage{amsfonts}
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{lastpage}
+\usepackage{listings}
 
 \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in,headsep=0in}
 
@@ -75,3 +76,39 @@
 \fancyhead[L]{}
 \fancyfoot[C]{}
 \renewcommand{\headrulewidth}{0pt}
+
+\lstdefinelanguage{Alloy}
+{
+  % list of keywords
+  morekeywords={
+    assert, pred, all, no, lone, one, some, check, run,
+    but, let, implies, not, iff, in, and, or, set, sig, Int, int,
+    if, then, else, exactly, disj, fact, fun, module, abstract,
+    extends, open, none, univ, iden, seq, String
+  },
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[l]{--},
+  morecomment=[s]{/*}{*/}
+}
+
+\lstset{
+	tabsize=2,
+    basicstyle=\ttfamily\scriptsize,
+    %upquote=true,
+    %aboveskip={1.5\baselineskip},
+    columns=fixed,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    %frame=single,
+    %rulecolor=\color[rgb]{0.75,0.75,0.75},
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0.627,0.126,0.941},
+    emphstyle={[1]\color[rgb]{0.133,0.545,0.133}},
+}
