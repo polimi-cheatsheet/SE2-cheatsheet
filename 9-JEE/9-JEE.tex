@@ -117,3 +117,168 @@ Lifecycle:
     \item Invocation of \lstinline{@PreDestroy} method (if exists).
     \item Bean is garbage-collected.
 \end{enumerate}
+
+\subsection{JPA}
+\emph{Java Persistence API} is an interface to manage a DB (usually relational).
+
+\subsubsection{Entity}
+A table of the DB corresponds to a Java class.
+The attributes of the Java class are mapped to columns of the table.
+Relationships are define through annotations.
+
+Example:
+\begin{lstlisting}[language=Java]
+@Entity
+@Table(name="users")
+public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long Uid;
+
+    @NotNull
+    private String name;
+
+    @Pattern(regexp="...")
+    private String email;
+
+    public User() {
+        super();
+    }
+
+    // getter
+    public Long getUid() {
+        return Uid;
+    }
+}
+\end{lstlisting}
+
+\subsubsection{EntityManager}
+Entities are managed by an \lstinline{EntityManager}, associated to a \emph{persistence context}.
+\begin{itemize}
+    \item Managing an Entity Instance’s Lifecycle
+    \item Finding Entities Using the Entity Manager
+    \item Persisting and Removing Entity Instances
+    \item Query
+    \item Synchronizing Entity Data to the Database
+\end{itemize}
+
+Example:
+\begin{lstlisting}[language=Java]
+@Stateless
+public class MyProductManager implements ProdutManager {
+    @PersistenceContext
+    private EntityManager em;
+
+    @Override
+    public Product findProduct(int Productid) {
+        return em.find(Product.class, Productid);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Named query}
+Example:
+\begin{lstlisting}[language=Java]
+@Entity
+@NamedQueries({
+    @NamedQuery(
+        name="Product.FIND_BY_NAME",
+        query="SELECT p FROM Product PT WHERE PT.name=:name"
+    )
+})
+
+// inside a business logic bean
+@PersistenceContext
+private EntityManager em;
+
+@Override
+public List<Product> findByName(String name) {
+    Query query = em.createNamedQuery(
+        "Product.FIND_BY_NAME",
+        Product.class
+    );
+    query.setParameter("name", name);
+    List<Product> p = query.getResultList();
+    ...
+}
+\end{lstlisting}
+
+\subsubsection{Relationship}
+\textbf{Unidirectional One-to-one}\\
+\begin{lstlisting}[language=Java]
+@OneToOne
+@JoinColumn(name="columnName")
+private OtherEntity foo;
+\end{lstlisting}
+
+\textbf{Bidirectional One-to-one}\\
+In the first entity entity:
+\begin{lstlisting}[language=Java]
+@OneToOne
+@JoinColumn(name="columnName")
+private OtherEntity foo;
+\end{lstlisting}
+
+In the other entity:
+\begin{lstlisting}[language=Java]
+@OneToOne(mappedBy=foo)
+private FirstEntity bar;
+\end{lstlisting}
+
+\textbf{Many-to-one}\\
+The primary key of the other entity is used as a foreign key.
+\begin{lstlisting}[language=Java]
+@ManyToOne
+private OtherEntity foo;
+\end{lstlisting}
+
+\textbf{One-to-many}\\
+\begin{lstlisting}[language=Java]
+@OneToMany
+private Collection<OtherEntity> foos;
+\end{lstlisting}
+
+\textbf{Bidirectional one-to-many/many-to-one}\\
+In the first entity:
+\begin{lstlisting}[language=Java]
+@ManyToOne
+private OtherEntity foo;
+\end{lstlisting}
+
+In the other entity:
+\begin{lstlisting}[language=Java]
+@OneToMany(mappedBy=foo)
+private Collection<FirstEntity> bars;
+\end{lstlisting}
+
+\textbf{Unidirectional many-to-many}\\
+Let's suppose to have two tables $A$ and $B$, $A$ having primary key $Aid$, $B$ having primary key $Bid$.
+The join table is called $JT$ and has two columns $fkA$ and $fkB$, respectively the foreign key to $Aid$ and $Bid$.
+
+Inside entity $A$ we have:
+\begin{lstlisting}[language=Java]
+@ManyToMany
+@JoinTable(
+    name="JT",
+    joinColumns = {
+        @JoinColumn(
+            name="fkA",
+            referencedColumnName="Aid"
+        )
+    },
+    inverseJoinColumns ={
+        @JoinColumn(
+            name="fkB",
+            referencedColumnName="Bid"
+        )
+    }
+)
+private Collection<B> foo;
+\end{lstlisting}
+
+\textbf{Bidirectional many-to-many}\\
+In entity $A$ is the same as before, in entity $B$:
+\begin{lstlisting}[language=Java]
+@ManyToMany(mappedBy="foo")
+private Collection<A> bar;
+\end{lstlisting}
