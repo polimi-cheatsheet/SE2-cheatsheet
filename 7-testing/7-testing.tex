@@ -130,3 +130,10 @@ Testing of the whole system, both functional and non-functional.
 \textbf{Black box} Used to test integration and the whole system. Used to check if expected behavior is the behavior of the software (\emph{Model-based testing}).
 
 \textbf{Capture and reply} First test is manual (so it is costly) but it is recorded. Next time the test is an automatic replay of the first test, for which we know the outcome (used for example for auto-regression testing on GUI).
+
+\subsection{Black box testing a state machine}
+If the system acts like a state machine (there are states and transactions between them) there are 2 criterion of coverage:
+\begin{itemize}
+    \item Coverage of States: the test cases must collectively reach all the states
+    \item Coverage of Transactions: the test cases must collectively reach all the transactions
+\end{itemize}
